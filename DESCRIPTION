@@ -1,6 +1,6 @@
 Package: flowchaRt
 Title: Create Flowchart Diagrams with tikz
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: c( person("Jordan", "Creed", email =
         "Jordan.H.Creed@moffitt.org", role = c("aut")),
         person("Garrick", "Aden-Buie", email =
@@ -12,7 +12,12 @@ License: MIT + file LICENSE
 URL: https://github.com/GerkeLab/flowchaRt
 BugReports: https://github.com/GerkeLab/flowchaRt/issues
 Imports: 
-    magrittr
+    glue,
+    magick,
+    magrittr,
+    pdftools,
+    tinytex,
+    tools
 Suggests: 
     spelling,
     testthat
