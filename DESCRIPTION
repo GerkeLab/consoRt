@@ -1,18 +1,23 @@
 Package: flowchaRt
-Version: 0.0.0.9000
 Title: Create Flowchart Diagrams with tikz
+Version: 0.0.0.9003
+Authors@R: c( person("Jordan", "Creed", email =
+        "Jordan.H.Creed@moffitt.org", role = c("aut")),
+        person("Garrick", "Aden-Buie", email =
+        "Garrick.Aden-Buie@moffitt.org", role = c("aut")),
+        person("Travis", "Gerke", email = "Travis.Gerke@moffitt.org",
+        role = c("aut", "cre")) )
 Description: Create flowchart diagrams with tikz in R
-Authors@R: person("Garrick", "Aden-Buie", email = "Garrick.Aden-Buie@moffitt.org", role = c("aut", "cre"))
 License: MIT + file LICENSE
+URL: https://github.com/GerkeLab/flowchaRt
+BugReports: https://github.com/GerkeLab/flowchaRt/issues
+Imports: 
+    magrittr
+Suggests: 
+    spelling,
+    testthat
 Encoding: UTF-8
+Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 6.1.0
-Suggests: 
-    testthat,
-    spelling
-Language: en-US
-Imports: 
-    magrittr
-URL: https://github.com/GerkeLab/flowchaRt
-BugReports: https://github.com/GerkeLab/flowchaRt/issues
