@@ -1,6 +1,11 @@
-#' Null coallesce something operator
-#'
-#' @keywords internal
+#' @title Null or Default
+#' @description Null or default infix function borrowed from [purrr].
+#' @param x,y If `x` is NULL, will return `y`; otherwise returns `x`.
+#' @name null-default
+#' @examples
+#' 1 %||% 2
+#' NULL %||% 2
+#' @family utilities
 `%||%` <- function(x, y) if (is.null(x)) y else x
 
 if_not_missing <- function(x, show = NULL, .na = "") {
