@@ -18,10 +18,10 @@ are required to compile the tikz drawing. Ex.
 
 \item{tikz_style}{<list> A named list of tikz style definitions, e.g.
 \code{list(circle = "draw, ellipse")} will be converted to
-\code{\tikzstyle{cloud} = [draw, ellipse]}.}
+\code{\\tikzstyle{cloud} = [draw, ellipse]}.}
 
 \item{tikz_picture}{<chr> A vector or character string of options to be
-passed to the \code{\begin{tikzpicture}[...]} command.}
+passed to the \code{\\begin{tikzpicture}[...]} command.}
 
 \item{class_options}{<chr> A vector of character string of options to be
 passed to the \code{standalone} document class.}

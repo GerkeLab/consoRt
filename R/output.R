@@ -15,9 +15,9 @@
 #'   `c("calc", "fit", "shapes", "arrows")`
 #' @param tikz_style <list> A named list of tikz style definitions, e.g.
 #'   `list(circle = "draw, ellipse")` will be converted to
-#'   `\tikzstyle{cloud} = [draw, ellipse]`.
+#'   `\\tikzstyle{cloud} = [draw, ellipse]`.
 #' @param tikz_picture <chr> A vector or character string of options to be
-#'   passed to the `\begin{tikzpicture}[...]` command.
+#'   passed to the `\\begin{tikzpicture}[...]` command.
 #' @param class_options <chr> A vector of character string of options to be
 #'   passed to the `standalone` document class.
 #' @inheritDotParams tinytex::latexmk
