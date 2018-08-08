@@ -42,18 +42,16 @@ write_tikz <- function(
   }
 
   tikz_text <- collapse_line(tikz_text)
-  tikz_library <- if_not_missing(tikz_library,
-    wrap(collapse_comma(tikz_library), "\\usetikzlibrary{", "}"))
-  class_options <- if_not_missing(class_options,
-    wrap(collapse_comma(class_options), "[", "]"))
-  tikz_style <- if (!is.null(tikz_style)) {
+  tikz_library <- tikz_library %??%
+    wrap(collapse_comma(tikz_library), "\\usetikzlibrary{", "}")
+  class_options <- class_options %??%
+    wrap(collapse_comma(class_options), "[", "]")
+  tikz_style <- tikz_style %??%
     tikz_style %>%
       purrr::imap_chr(~ glue::glue("\\tikzstyle{{{.y}}} = [{.x}]")) %>%
       paste(collapse = "\n")
-  } else ""
 
-  tikz_picture <- if_not_missing(tikz_picture, collapse_comma(tikz_picture))
-
+  tikz_picture <- tikz_picture %??% collapse_comma(tikz_picture)
 
   tmpfile <- tempfile(fileext = ".tex")
   x <- readLines(system.file("base_tikz.tex", package = "flowchaRt"))

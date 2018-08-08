@@ -1,6 +1,6 @@
 Package: flowchaRt
 Title: Create Flowchart Diagrams with tikz
-Version: 0.0.0.9004
+Version: 0.0.0.9005
 Authors@R: c( person("Jordan", "Creed", email =
         "Jordan.H.Creed@moffitt.org", role = c("aut")),
         person("Garrick", "Aden-Buie", email =
