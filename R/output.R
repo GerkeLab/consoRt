@@ -54,7 +54,7 @@ write_tikz <- function(
   tikz_picture <- tikz_picture %??% collapse_comma(tikz_picture)
 
   tmpfile <- tempfile(fileext = ".tex")
-  x <- readLines(system.file("base_tikz.tex", package = "flowchaRt"))
+  x <- readLines(system.file("base_tikz.tex", package = "consoRt"))
   x <- glue::glue(collapse_line(x), .open = "{{", .close = "}}")
 
   message("writing temp tex file to: ", tmpfile)

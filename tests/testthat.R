@@ -1,4 +1,4 @@
 library(testthat)
-library(flowchaRt)
+library(consoRt)
 
-test_check("flowchaRt")
+test_check("consoRt")
