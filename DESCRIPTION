@@ -1,16 +1,16 @@
-Package: flowchaRt
-Title: Create Flowchart Diagrams with tikz
-Version: 0.0.0.9005
+Package: consoRt
+Title: Create CONSORT Diagrams with tikz
+Version: 0.0.0.9006
 Authors@R: c( person("Jordan", "Creed", email =
         "Jordan.H.Creed@moffitt.org", role = c("aut")),
         person("Garrick", "Aden-Buie", email =
         "Garrick.Aden-Buie@moffitt.org", role = c("aut")),
         person("Travis", "Gerke", email = "Travis.Gerke@moffitt.org",
         role = c("aut", "cre")) )
-Description: Create flowchart diagrams with tikz in R
+Description: Create CONSORT diagrams with tikz in R
 License: MIT + file LICENSE
-URL: https://github.com/GerkeLab/flowchaRt
-BugReports: https://github.com/GerkeLab/flowchaRt/issues
+URL: https://github.com/GerkeLab/consoRt
+BugReports: https://github.com/GerkeLab/consoRt/issues
 Imports: 
     glue,
     magick,
