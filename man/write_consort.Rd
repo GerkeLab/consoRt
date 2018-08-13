@@ -17,3 +17,7 @@ write_consort(study_data, path, ..., density = 72)
 \description{
 Write CONSORT Diagram
 }
+\references{
+\url{http://www.consort-statement.org/},
+\url{http://www.consort-statement.org/consort-statement/flow-diagram}
+}

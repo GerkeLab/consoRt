@@ -95,6 +95,8 @@ get_out_format <- function(path) {
 #' @title Write CONSORT Diagram
 #' @param study_data Study data data frame (see [study_data] for information)
 #' @inheritParams write_tikz
+#' @references <http://www.consort-statement.org/>,
+#'   <http://www.consort-statement.org/consort-statement/flow-diagram>
 #' @export
 write_consort <- function(study_data, path, ..., density = 72) {
   n_assessed <- nrow(study_data)
