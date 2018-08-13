@@ -91,3 +91,122 @@ get_out_format <- function(path) {
   }
   out_format
 }
+
+#' @title Write CONSORT Diagram
+#' @param study_data Study data data frame (see [study_data] for information)
+#' @inheritParams write_tikz
+#' @export
+write_consort <- function(study_data, path, ..., density = 72) {
+  n_assessed <- nrow(study_data)
+
+  # Excluded ----
+  excluded <- study_data %>% filter(eligible != "Eligible")
+  n_excluded <- nrow(excluded)
+  t_excluded <- excluded %>%
+    group_by(eligible) %>%
+    count()
+
+  # Randomized ---
+  n_randomized <- study_data %>% filter(eligible == "Eligible") %>% nrow()
+
+  # Allocation ---
+  # Allocation: Intervention ----
+  alloc_intervention <- study_data %>% filter(allocation == "Intervention")
+  n_intervention <- nrow(alloc_intervention)
+  n_intervention_yes <- sum(alloc_intervention$intervention)
+  n_intervention_no <- sum(!alloc_intervention$intervention)
+  t_intervention_excl_reason <- alloc_intervention %>%
+    filter(!is.na(intervention_excl_reason)) %>%
+    group_by(intervention_excl_reason) %>%
+    count(sort = TRUE)
+
+  # Allocation: Placebo ----
+  alloc_placebo <- filter(study_data, allocation == "Placebo")
+  n_placebo <- nrow(alloc_placebo)
+  n_placebo_yes <- sum(alloc_placebo$placebo)
+  n_placebo_no <- sum(!alloc_placebo$placebo)
+  t_placebo_excl_reason <- alloc_placebo %>%
+    filter(!is.na(placebo_excl_reason)) %>%
+    group_by(placebo_excl_reason) %>%
+    count(sort = TRUE)
+
+  # Follow-Up ----
+  # Follow-Up: Intervention ----
+  fu_intervention <- filter(study_data, intervention)
+  t_intervention_lost <- fu_intervention %>%
+    filter(!is.na(lost_reason)) %>%
+    group_by(lost_reason) %>%
+    count(sort = TRUE)
+  n_intervention_lost <- sum(t_intervention_lost$n)
+  t_intervention_discontinued <- fu_intervention %>%
+    filter(!is.na(discontinued_reason)) %>%
+    group_by(discontinued_reason) %>%
+    count(sort = TRUE)
+  n_intervention_discontinued <- sum(t_intervention_discontinued$n)
+
+  # Follow-Up: Placebo ----
+  fu_placebo <- filter(study_data, placebo)
+  t_placebo_lost <- fu_placebo %>%
+    filter(!is.na(lost_reason)) %>%
+    group_by(lost_reason) %>%
+    count(sort = TRUE)
+  n_placebo_lost <- sum(t_placebo_lost$n)
+  t_placebo_discontinued <- fu_placebo %>%
+    filter(!is.na(discontinued_reason)) %>%
+    group_by(discontinued_reason) %>%
+    count(sort = TRUE)
+  n_placebo_discontinued <- sum(t_placebo_discontinued$n)
+
+  # Analyzed ----
+  # Analyzed: Intervention ----
+  a_intervention <- filter(study_data, allocation == "Intervention", !is.na(analyzed))
+  n_intervention_analyzed <- sum(a_intervention$analyzed)
+  n_intervention_analyzed_excl <- sum(!a_intervention$analyzed)
+  t_intervention_analyzed_excl_reason <- a_intervention %>%
+    filter(!analyzed) %>%
+    group_by(analyzed_excl_reason) %>%
+    count(sort = TRUE)
+
+  # Analyzed: Placebo ----
+  a_placebo <- filter(study_data, allocation == "Placebo", !is.na(analyzed))
+  n_placebo_analyzed <- sum(a_placebo$analyzed)
+  n_placebo_analyzed_excl <- sum(!a_placebo$analyzed)
+  t_placebo_analyzed_excl_reason <- a_placebo %>%
+    filter(!analyzed) %>%
+    group_by(analyzed_excl_reason) %>%
+    count(sort = TRUE)
+
+  # Load template
+  template <- readLines(system.file("consort_template.whisker", package = "consoRt"))
+
+  # Prep for glue ----
+  t_excluded                          <- latex_count_reason(t_excluded)
+  t_intervention_excl_reason          <- latex_count_reason(t_intervention_excl_reason)
+  t_placebo_excl_reason               <- latex_count_reason(t_placebo_excl_reason)
+  t_intervention_lost                 <- latex_count_reason(t_intervention_lost)
+  t_intervention_discontinued         <- latex_count_reason(t_intervention_discontinued)
+  t_placebo_lost                      <- latex_count_reason(t_placebo_lost)
+  t_placebo_discontinued              <- latex_count_reason(t_placebo_discontinued)
+  t_intervention_analyzed_excl_reason <- latex_count_reason(t_intervention_analyzed_excl_reason)
+  t_placebo_analyzed_excl_reason      <- latex_count_reason(t_placebo_analyzed_excl_reason)
+
+  # Write tex file ----
+  # x <- glue::glue(paste(template, collapse = "\n"), .open = "<<", .close = ">>")
+  x <- whisker::whisker.render(template)
+  write_latex(x, path, ..., density = density)
+}
+
+remove_section <- function(x, section_name) {
+  idx <- grep(paste0("^\\s*%%", section_name, "%%$"), x)
+  if (!length(idx)) return(x)
+  x[-seq(min(idx), max(idx))]
+}
+
+latex_count_reason <- function(x) {
+  if (!nrow(x)) return(NULL)
+  names(x) <- c("reason", "n")
+  escape_latex <- getFromNamespace("escape_latex", "knitr")
+  x$reason <- escape_latex(x$reason)
+  y <- glue::glue_data(x, "{n} & {reason} \\\\")
+  paste(as.character(y), collapse = "\n")
+}
