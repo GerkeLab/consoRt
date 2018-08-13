@@ -34,13 +34,6 @@ write_tikz <- function(
   ...,
   density = 72
 ) {
-  out_format <- tools::file_ext(tolower(path))
-  if (!out_format %in% c("pdf", "png", "jpeg", "gif")) {
-    rlang::abort(
-      glue::glue("'{out_format}' is not a supported extension of `write_tikz()`")
-    )
-  }
-
   tikz_text <- collapse_line(tikz_text)
   tikz_library <- tikz_library %??%
     wrap(collapse_comma(tikz_library), "\\usetikzlibrary{", "}")
@@ -53,12 +46,24 @@ write_tikz <- function(
 
   tikz_picture <- tikz_picture %??% collapse_comma(tikz_picture)
 
-  tmpfile <- tempfile(fileext = ".tex")
   x <- readLines(system.file("base_tikz.tex", package = "consoRt"))
   x <- glue::glue(collapse_line(x), .open = "{{", .close = "}}")
 
+  write_latex(x, path, ..., density = density)
+}
+
+#' @title Write LaTeX File and Compile to PDF or Image
+#' @param x LaTeX document as character string
+#' @inheritParams write_tikz
+#' @export
+write_latex <- function(x, path, ..., density = 72) {
+  out_format <- get_out_format(path)
+
+  tmpfile <- if (out_format == "tex") path else tempfile(fileext = ".tex")
   message("writing temp tex file to: ", tmpfile)
   cat(x, file = tmpfile)
+
+  if (out_format == "tex") return(path)
 
   tex_path <- if (out_format == "pdf") path else tempfile(fileext = ".pdf")
   tinytex::latexmk(tmpfile, pdf_file = tex_path, ...)
@@ -75,4 +80,14 @@ write_tikz <- function(
 
   if (interactive()) utils::browseURL(path)
   path
+}
+
+get_out_format <- function(path) {
+  out_format <- tools::file_ext(tolower(path))
+  if (!out_format %in% c("pdf", "png", "jpeg", "gif", "tex")) {
+    rlang::abort(
+      glue::glue("'{out_format}' is not a supported extension of `write_tikz()`")
+    )
+  }
+  out_format
 }
