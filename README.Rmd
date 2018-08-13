@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+options(max.print = 99999)
 ```
 
 # consoRt
@@ -27,3 +28,22 @@ You can install the development version of `consoRt` from GitHub:
 devtools::install_github("gerkelab/consoRt@dev")
 ```
 
+## Quick Example
+
+For a trial of 500 patients.
+
+```{r}
+library(consoRt)
+study_data <- consoRt::study_data
+```
+
+```{r echo=FALSE}
+knitr::kable(study_data[c(23, 33, 179, 270, 303, 351, 398, 442, 488),], 
+             row.names = FALSE)
+```
+
+```{r}
+consort <- write_consort(study_data, "man/figures/README-consort-diagram.png")
+
+knitr::include_graphics(consort)
+```
