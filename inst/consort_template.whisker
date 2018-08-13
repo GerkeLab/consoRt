@@ -1,9 +1,10 @@
 \documentclass[10pt,a4paper]{standalone}
 \usepackage[usenames,dvispnames,svgnames,table]{xcolor}
 \usepackage{helvet}
+\usepackage{amsmath}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage{tikz}
-\usetikzlibrary{positioning,calc}
+\usetikzlibrary{positioning,shapes,arrows,calc,fit,decorations.pathmorphing,shapes.geometric}
 \setlength{\tabcolsep}{2pt}
 
 \begin{document}
@@ -12,6 +13,7 @@
 \begin{tikzpicture}[>=latex]
 
 \node [rectangle,draw] (1E) {Assessed for eligibility (n={{n_assessed}})};
+\node [left = of 1E, gray] (W) {Enrollment};
 \node [rectangle,draw, below right =10pt and -50 pt of 1E, align=left] (Ex) {Excluded (n={{n_excluded}}) \\
   {{#t_excluded}}
   \begin{tabular}{>{\bfseries}r l}
@@ -20,10 +22,11 @@
   {{/t_excluded}}
   };
 \node [rectangle,draw, below =80 pt of 1E] (1R) {Randomized (n={{n_randomized}})};
+\node [draw = white , fit={(1E)(Ex)(1R)}, inner sep=0.5cm, text=gray] (W2) {};
 
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ALLOCATION
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \node [rectangle,draw,below left = 30pt and -15 pt of 1R, align=left] (1I) {Allocated to intervention (n={{n_intervention}}) \\
   \begin{tabular}{>{\bfseries}r l}
     {{n_intervention_yes}} & Received intervention \\
@@ -45,11 +48,11 @@
     {{/t_placebo_excl_reason}}
   \end{tabular}
   };
-\node (X) at ($(1I)!0.5!(1P)$) [gray, align=center] {Allocation};
+\node [draw = white , fit={(1I)(1P)}, inner sep=0.5cm, text=gray] (X) {Allocation};
 
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % FOLLOW-UP
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \node [rectangle,draw, below = of 1I, align=left] (IF) {
 Lost to follow-up (n={{n_intervention_lost}}) \\
   {{#t_intervention_lost}}
@@ -78,11 +81,11 @@ Discontinued intervention (n={{n_placebo_discontinued}}) \\
   \end{tabular}
   {{/t_placebo_discontinued}}
   };
-\node (Y) at ($(IF)!0.5!(PF)$) [gray, align=center] {Follow-Up};
+\node [draw = white , fit={(IF)(PF)}, inner sep=0.5cm, text=gray] (Y) {Follow-Up};
 
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ANALYSIS
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \node [rectangle,draw, below = of IF, align=left] (IA) {
 Analysed (n={{n_intervention_analyzed}}) \\
@@ -106,11 +109,11 @@ Analysed (n={{n_placebo_analyzed}}) \\
     {{/t_placebo_analyzed_excl_reason}}
   \end{tabular}
   };
-\node (Z) at ($(IA)!0.5!(PA)$) [gray, align=center] {Analysis};
+\node [draw = white , fit={(IA)(PA)}, inner sep=0.5cm, text=gray] (Z) {Analysis};
 
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PATHS
-{{#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \path[->] (1E) edge (1R);
 \path[->] (1R) edge (1I);
