@@ -1,6 +1,6 @@
 Package: consoRt
 Title: Create CONSORT Diagrams with tikz
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Authors@R: c( person("Jordan", "Creed", email =
         "Jordan.H.Creed@moffitt.org", role = c("aut")),
         person("Garrick", "Aden-Buie", email =

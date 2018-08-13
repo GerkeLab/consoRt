@@ -1,0 +1,132 @@
+%\documentclass[varwidth, border={0 0 0 0}]{standalone}
+%\documentclass[border={0 0 0 0}]{standalone}
+\documentclass[10pt,a4paper]{standalone}
+\usepackage[usenames,dvispnames,svgnames,table]{xcolor}
+\usepackage{multirow}
+\usepackage{helvet}
+\usepackage{amsmath}
+\usepackage{rotating}
+\usepackage{graphicx}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{setspace}
+\usepackage{caption}
+\captionsetup{labelformat=empty}
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,arrows,calc,fit,decorations.pathmorphing,shapes.geometric}
+\usepackage{centernot}
+\setlength{\tabcolsep}{2pt}
+
+\begin{document}
+\tikzset{ module/.style={draw, rectangle},label/.style={ } }
+\tikzstyle{block1} = [rectangle, draw, text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{block2} = [rectangle, draw, text width=8em, text centered, rounded corners, minimum height=4em]
+
+%\begin{tikzpicture}[node distance = 2cm, auto]
+\begin{tikzpicture}[>=latex]
+%\begin{tikzpicture}
+
+\node [rectangle,draw] (1E) {Assessed for eligibility (n=600)};
+\node [rectangle,draw, below right =10pt and -50 pt of 1E, align=left] (Ex) {Excluded (n=2) \\
+  \begin{tabular}{>{\bfseries}r l}
+    2 & Ineligble \\
+    0 & Declined \\
+    0 & Other
+  \end{tabular}
+  };
+\node [rectangle,draw, below =80 pt of 1E] (1R) {Randomized (n=598)};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ALLOCATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\node [rectangle,draw,below left = 30pt and -15 pt of 1R, align=left] (1I) {Allocated to intervention (n=298) \\
+  \begin{tabular}{>{\bfseries}r l}
+    188 & Received intervention \\
+    95  & Did not receive intervention \\
+    & \begin{tabular}{>{\bfseries}r l}
+        X & Did not receive reason 1 ... \\
+        Y & Did not receive reason 2 ...
+      \end{tabular}
+  \end{tabular}};
+\node [rectangle,draw,below right =30pt and -15 pt of 1R, align=left] (1P) {Allocated to placebo (n=300) \\
+  \begin{tabular}{>{\bfseries}r l}
+    0 & Received placebo \\
+    0 & Did not receive placebo \\
+    & \begin{tabular}{>{\bfseries}r l}
+        X & Did not receive reason 1 ... \\
+        Y & Did not receive reason 2 ...
+      \end{tabular}
+  \end{tabular}
+  };
+\node (X) at ($(1I)!0.5!(1P)$) [gray, align=center] {Allocation};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% FOLLOW-UP
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\node [rectangle,draw, below = of 1I, align=left] (IF) {
+Lost to follow-up (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Lost reason 1 ... \\
+    Y & Lost reason 2 ...
+  \end{tabular} \\
+Discontinued intervention (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Discontinued reason 1 ... \\
+    Y & Discontinued reason 2 ...
+  \end{tabular}
+  };
+\node [rectangle,draw, below = of 1P, align=left] (PF) {
+Lost to follow-up (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Lost reason 1 ... \\
+    Y & Lost reason 2 ...
+  \end{tabular} \\
+Discontinued intervention (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Discontinued reason 1 ... \\
+    Y & Discontinued reason 2 ...
+  \end{tabular}
+  };
+\node (Y) at ($(IF)!0.5!(PF)$) [gray, align=center] {Follow-Up};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ANALYSIS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\node [rectangle,draw, below = of IF, align=left] (IA) {
+Analysed (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Excluded from analysis\\
+    & \begin{tabular}{>{\bfseries}r l}
+        X & Exclusion reason 1 ... \\
+        Y & Exclusion reason 2 ...
+      \end{tabular}
+  \end{tabular}
+  };
+\node [rectangle,draw, below = of PF, align=left] (PA) {
+Analysed (n=XX) \\
+  \begin{tabular}{>{\bfseries}r l}
+    X & Excluded from analysis\\
+    & \begin{tabular}{>{\bfseries}r l}
+        X & Exclusion reason 1 ... \\
+        Y & Exclusion reason 2 ...
+      \end{tabular}
+  \end{tabular}
+  };
+\node (Z) at ($(IA)!0.5!(PA)$) [gray, align=center] {Analysis};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PATHS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\path[->] (1E) edge (1R);
+\path[->] (1R) edge (1I);
+\path[->] (1R) edge (1P);
+\path[->] (1I) edge (IF);
+\path[->] (1P) edge (PF);
+\path[->] (IF) edge (IA);
+\path[->] (PF) edge (PA);
+ \draw[ ->](1E) |- (Ex);
+
+\end{tikzpicture}
+
+\end{document}
