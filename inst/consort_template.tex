@@ -1,108 +1,93 @@
 \documentclass[10pt,a4paper]{standalone}
 \usepackage[usenames,dvispnames,svgnames,table]{xcolor}
-\usepackage{helvet}
-\usepackage{amsmath}
-\renewcommand{\familydefault}{\sfdefault}
+\usepackage{helvet} % font life choice
+%\usepackage{amsmath}
+\renewcommand{\familydefault}{\sfdefault} % font life choice
 \usepackage{tikz}
-\usetikzlibrary{positioning,shapes,arrows,calc,fit,decorations.pathmorphing,shapes.geometric}
+\usetikzlibrary{positioning,shapes,calc,matrix,arrows,decorations.pathmorphing,fit,shapes.geometric}
 \setlength{\tabcolsep}{2pt}
 
+
 \begin{document}
-\tikzset{ module/.style={draw, rectangle},label/.style={ } }
+\tikzset{ module/.style={draw, rectangle}, label/.style={ } }
 
 \begin{tikzpicture}[>=latex]
-
-
-\node [rectangle,draw] (1E) {Assessed for eligibility (n=600)};
-\node [left = of 1E, gray] (W) {Enrollment};
-\node [rectangle,draw, below right =10pt and -50 pt of 1E, align=left] (Ex) {Excluded (n=2) \\
+\matrix(m)[matrix of nodes, nodes={label, anchor=center}, ampersand replacement=\&, row sep=0.5cm] 
+{
+\node [text=gray] (W) {Enrollment}; \& \node [rectangle,draw] (1E) {Assessed for eligibility (n=600)}; \& ~\\ 
+~ \& ~ \& \node[rectangle,draw, align=left] (Ex) {Excluded (n=2) \\
   \begin{tabular}{>{\bfseries}r l}
     2 & Ineligible \\
     0 & Declined \\
     0 & Other
   \end{tabular}
-  };
-\node [rectangle,draw, below =80 pt of 1E] (1R) {Randomized (n=598)};
-\node [draw = white , fit={(1E)(Ex)(1R)}, inner sep=0.5cm, text=gray] (W2) {};
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  }; \\ 
+~ \& \node [rectangle,draw] (1R) {Randomized (n=598)}; \& ~ \\ [0.7cm]
 % ALLOCATION
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\node [rectangle,draw,below left = 30pt and -15 pt of 1R, align=left] (1I) {Allocated to intervention (n=298) \\
+\node [rectangle,draw,align=left] (1I) {Allocated to intervention (n=298) \\
   \begin{tabular}{>{\bfseries}r l}
     188 & Received intervention \\
     95  & Did not receive intervention \\
     & \begin{tabular}{>{\bfseries}r l}
         X & Did not receive reason 1 \\
-        Y & Did not receive reason 2
-      \end{tabular}
-  \end{tabular}};
-\node [rectangle,draw,below right =30pt and -15 pt of 1R, align=left] (1P) {Allocated to placebo (n=300) \\
+        Y & Did not receive reason 2 \\
+        \end{tabular}
+  \end{tabular}};  \& \node [text=gray] (X) {Allocation}; \&  \node [rectangle,draw,align=left] (1P) {Allocated to placebo (n=300) \\
   \begin{tabular}{>{\bfseries}r l}
     0 & Received placebo \\
     0 & Did not receive placebo \\
     & \begin{tabular}{>{\bfseries}r l}
         X & Did not receive reason 1 \\
-        Y & Did not receive reason 2
-      \end{tabular}
+        Y & Did not receive reason 2  \\
+        \end{tabular}
   \end{tabular}
-  };
-\node [draw = white , fit={(1I)(1P)}, inner sep=0.5cm, text=gray] (X) {Allocation};
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  }; \\ [0.7cm]
 % FOLLOW-UP
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\node [rectangle,draw, below = of 1I, align=left] (IF) {
+\node [rectangle,draw, align=left] (IF) {
 Lost to follow-up (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Lost reason 1  \\
-    Y & Lost reason 2
+    Y & Lost reason 2 
   \end{tabular} \\
 Discontinued intervention (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Discontinued reason 1  \\
-    Y & Discontinued reason 2
+    Y & Discontinued reason 2 
   \end{tabular}
-  };
-\node [rectangle,draw, below = of 1P, align=left] (PF) {
+  }; \& \node [text=gray] (Y) {Follow-Up}; \& \node [rectangle,draw, align=left] (PF) {
 Lost to follow-up (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Lost reason 1  \\
-    Y & Lost reason 2
+    Y & Lost reason 2 
   \end{tabular} \\
 Discontinued intervention (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Discontinued reason 1  \\
-    Y & Discontinued reason 2
+    Y & Discontinued reason 2 
   \end{tabular}
-  };
-\node [draw = white , fit={(IF)(PF)}, inner sep=0.5cm, text=gray] (Y) {Follow-Up};
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  }; \\ [0.7cm]
 % ANALYSIS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\node [rectangle,draw, below = of IF, align=left] (IA) {
+\node [rectangle,draw, align=left] (IA) {
 Analysed (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Excluded from analysis\\
     & \begin{tabular}{>{\bfseries}r l}
         X & Exclusion reason 1  \\
-        Y & Exclusion reason 2
+        Y & Exclusion reason 2 
       \end{tabular}
   \end{tabular}
-  };
-\node [rectangle,draw, below = of PF, align=left] (PA) {
+  }; \& \node [text=gray] (Z) {Analysis}; \& \node [rectangle,draw, align=left] (PA) {
 Analysed (n=XX) \\
   \begin{tabular}{>{\bfseries}r l}
     X & Excluded from analysis\\
     & \begin{tabular}{>{\bfseries}r l}
         X & Exclusion reason 1 \\
-        Y & Exclusion reason 2
+        Y & Exclusion reason 2 
       \end{tabular}
   \end{tabular}
-  };
-\node [draw = white , fit={(IA)(PA)}, inner sep=0.5cm, text=gray] (Z) {Analysis};
+  }; \\
+};
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PATHS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -116,6 +101,6 @@ Analysed (n=XX) \\
 \path[->] (PF) edge (PA);
  \draw[ ->](1E) |- (Ex);
 
-\end{tikzpicture}
 
+\end{tikzpicture}
 \end{document}
